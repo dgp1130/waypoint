@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
+//using Xam.Plugin.Media;
 
 namespace Waypoint
 {
@@ -14,6 +15,7 @@ namespace Waypoint
 		Image Image1;
         public MainPage()
         {
+			//Media.Plugin.MediaImplementation.OnFilesPicked(args);
 			Button TakePictureButton = new Button
 			{
 				Text = "Take from camera",
@@ -57,9 +59,15 @@ namespace Waypoint
 		{
 			await CrossMedia.Current.Initialize();
 
-			if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+			if (!CrossMedia.Current.IsCameraAvailable)
 			{
-				await DisplayAlert("No Camera", "No Camera available.", "OK");
+				await DisplayAlert("No Camera", "camera is not available.", "OK");
+				return;
+			}
+
+			if (!CrossMedia.Current.IsTakePhotoSupported)
+			{
+				await DisplayAlert("No Camera", "take photo is not supported", "OK");
 				return;
 			}
 
