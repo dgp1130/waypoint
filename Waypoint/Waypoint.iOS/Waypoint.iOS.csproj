@@ -138,6 +138,12 @@
     <Reference Include="Xamarin.Forms.Xaml">
       <HintPath>..\..\packages\Xamarin.Forms.2.3.4.247\lib\Xamarin.iOS10\Xamarin.Forms.Xaml.dll</HintPath>
     </Reference>
+    <Reference Include="Plugin.Compass.Abstractions">
+      <HintPath>..\..\packages\Plugin.Compass.2.0.0\lib\Xamarin.iOS10\Plugin.Compass.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Compass">
+      <HintPath>..\..\packages\Plugin.Compass.2.0.0\lib\Xamarin.iOS10\Plugin.Compass.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Waypoint\Waypoint.csproj">

@@ -7,15 +7,16 @@ using Xamarin.Forms;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 //using Xam.Plugin.Media;
+using Plugin.Compass;
 
 namespace Waypoint
 {
     public partial class MainPage : ContentPage
     {
-		Image Image1;
+		Image Image1;		 
         public MainPage()
         {
-			//Media.Plugin.MediaImplementation.OnFilesPicked(args);
+			Padding = new Thickness(0, 20, 0, 0);
 			Button TakePictureButton = new Button
 			{
 				Text = "Take from camera",
@@ -30,14 +31,37 @@ namespace Waypoint
 			{
 				HeightRequest = 240
 			};
+			Image CompassImage = new Image
+			{
+				HeightRequest = 50,
+				Source = ImageSource.FromUri(new Uri("https://cdn2.iconfinder.com/data/icons/map-location-set/512/632503-compass_wind_rose-512.png"))
+			};
+			Label label = new Label
+			{
+				Text = "no heading yet"
+			};
             InitializeComponent();
 			this.Content = new StackLayout
 			{
 				Children = {
 					TakePictureButton,
-					UploadPictureButton
+					UploadPictureButton,
+					Image1,
+					CompassImage,
+					label
 				}
 			};
+
+			CrossCompass.Current.CompassChanged += (s, e) =>
+			{
+			    //Debug.WriteLine("*** Compass Heading = {0}", e.Heading);
+			    
+			    label.Text = $"Heading = {e.Heading}";
+				//rotate compass image here
+			   
+			};
+
+			CrossCompass.Current.Start();
         }
 
 		private async void UploadPictureButton_Clicked(object sender, EventArgs e)
@@ -50,7 +74,11 @@ namespace Waypoint
 
 			var file = await CrossMedia.Current.PickPhotoAsync();
 			if (file == null)
+			{
+				await DisplayAlert("Error", "Photo was null", "OK");
 				return;
+			}
+				//return;
 
 			Image1.Source=ImageSource.FromStream(() => file.GetStream());
 		}
