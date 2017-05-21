@@ -1,6 +1,8 @@
 ﻿{
   "dependencies": {
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
+    "Plugin.Compass": "2.0.0",
+    "Xam.Plugin.Media": "2.6.2",
     "Xamarin.Forms": "2.3.4.224"
   },
   "frameworks": {
