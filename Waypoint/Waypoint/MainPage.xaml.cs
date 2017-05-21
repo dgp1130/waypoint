@@ -16,7 +16,18 @@ namespace Waypoint
 		Image Image1;		 
         public MainPage()
         {
-			Padding = new Thickness(0, 20, 0, 0);
+            InitializeComponent();
+
+            Padding = new Thickness(0, 20, 0, 0);
+
+            // Temporary button to navigate to MapViewer
+            // When we have a grid of images, tapping one should perform the same action
+            Button viewerButton = new Button
+            {
+                Text = "View map",
+            };
+            viewerButton.Clicked += viewerButton_Clicked;
+
 			Button TakePictureButton = new Button
 			{
 				Text = "Take from camera",
@@ -40,10 +51,11 @@ namespace Waypoint
 			{
 				Text = "no heading yet"
 			};
-            InitializeComponent();
+
 			this.Content = new StackLayout
 			{
 				Children = {
+                    viewerButton,
 					TakePictureButton,
 					UploadPictureButton,
 					Image1,
@@ -62,6 +74,12 @@ namespace Waypoint
 			};
 
 			CrossCompass.Current.Start();
+        }
+
+        private async void viewerButton_Clicked(object sender, EventArgs evt)
+        {
+            // Navigate to MapViewer with SCU test case
+            await Navigation.PushAsync(new MapViewer(ImageSource.FromFile("test_case_scu.jpg")));
         }
 
 		private async void UploadPictureButton_Clicked(object sender, EventArgs e)

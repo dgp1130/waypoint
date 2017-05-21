@@ -13,7 +13,8 @@ namespace Waypoint
         {
             InitializeComponent();
 
-            MainPage = new Waypoint.MainPage();
+            // Start at MainPage, using it as base navigation
+            MainPage = new NavigationPage(new Waypoint.MainPage());
         }
 
         protected override void OnStart()
