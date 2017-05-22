@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace Waypoint
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MapViewer : ContentPage
     {
-        public MapViewer(ImageSource map)
+        public MapViewer(Stream map)
         {
             InitializeComponent();
 

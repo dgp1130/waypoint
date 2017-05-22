@@ -8,6 +8,9 @@ using Plugin.Media;
 using Plugin.Media.Abstractions;
 //using Xam.Plugin.Media;
 using Plugin.Compass;
+using System.IO;
+using System.Reflection;
+using System.Diagnostics;
 
 namespace Waypoint
 {
@@ -79,7 +82,11 @@ namespace Waypoint
         private async void viewerButton_Clicked(object sender, EventArgs evt)
         {
             // Navigate to MapViewer with SCU test case
-            await Navigation.PushAsync(new MapViewer(ImageSource.FromFile("test_case_scu.jpg")));
+            Assembly assembly = typeof(MainPage).GetTypeInfo().Assembly;
+            using (Stream stream = assembly.GetManifestResourceStream("Waypoint.test_case_scu.jpg"))
+            {
+                await Navigation.PushAsync(new MapViewer(stream));
+            }
         }
 
 		private async void UploadPictureButton_Clicked(object sender, EventArgs e)
