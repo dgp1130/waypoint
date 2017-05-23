@@ -151,7 +151,7 @@ namespace Waypoint
             Assembly assembly = typeof(MainPage).GetTypeInfo().Assembly;
             using (Stream stream = assembly.GetManifestResourceStream("Waypoint.test_case_scu.jpg"))
             {
-                await Navigation.PushAsync(new MapViewer(stream));
+                await Navigation.PushAsync(new MapViewer(stream, new Size(1313, 1135) /* hard code size temporarily */));
             }
         }
 

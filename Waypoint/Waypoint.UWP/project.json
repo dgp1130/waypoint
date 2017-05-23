@@ -4,6 +4,8 @@
     "Microsoft.Bcl.Build": "1.0.21",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.3.3",
     "Plugin.Compass": "2.0.0",
+    "SkiaSharp": "1.58.0",
+    "SkiaSharp.Views.Forms": "1.58.0",
     "Xam.Plugin.Media": "2.6.2",
     "Xamarin.Forms": "2.3.4.224"
   },
