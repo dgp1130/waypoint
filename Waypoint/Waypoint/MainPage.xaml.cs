@@ -30,16 +30,13 @@ namespace Waypoint
 				Text = "test output"
 			};
 
-			//var grid = new Grid();
-			//grid.RowDefinitions.Add (new RowDefinition { Height = new GridLength(2, GridUnitType.Star) });
-			//grid.RowDefinitions.Add (new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-			//grid.RowDefinitions.Add (new RowDefinition { Height = GridLength.Auto});
-			//grid.ColumnDefinitions.Add (new ColumnDefinition{ Width = GridLength.Auto });
-
 			//StackLayout 
 
 			List<Frame> frames = new List<Frame>();
 			List<String> urls = new List<String>();
+
+			TapGestureRecognizer tapGesture = new TapGestureRecognizer();
+			tapGesture.Tapped += viewerButton_Clicked;
 
 			urls.Add("http://www.yosemite.ca.us/maps/yosemite_national_park_map.jpg");
 			urls.Add("http://sites.ieee.org/scv-eds/files/2013/06/Picture1.jpg");
@@ -56,19 +53,24 @@ namespace Waypoint
 			grid.RowDefinitions.Add(new RowDefinition { Height = 100});
 			grid.ColumnDefinitions.Add(new ColumnDefinition { Width = 100 });
 
-			var alpha = new Image { Source = ImageSource.FromUri(new Uri(urls[0])) };
-			var beta = new Image { Source = ImageSource.FromUri(new Uri(urls[1])) };
-			var gamma = new Image { Source = ImageSource.FromUri(new Uri(urls[2])) };
-			var delta = new Image { Source = ImageSource.FromUri(new Uri(urls[3])) };
-			var epsilon = new Image { Source = ImageSource.FromUri(new Uri(urls[4])) };
-			//var theta = new Image { Source = ImageSource.FromUri(new Uri(urls[0])) };
+			for (int i = 0; i < urls.Count; i++)
+			{
+				frames.Add(new Frame
+				{
+					Content = new StackLayout{
+						Children = {
+							new Image { Source = ImageSource.FromUri(new Uri(urls[i])) }
+						}
+					}
+				});
+				frames[i].GestureRecognizers.Add(tapGesture);
+			}
 
-			grid.Children.Add(alpha, 0, 0);
-	        grid.Children.Add(beta, 1, 0);
-	        grid.Children.Add(gamma, 2, 0);
-	        grid.Children.Add(delta, 0, 1);
-	        grid.Children.Add(epsilon, 1, 1);
-	        //grid.Children.Add(theta, 2, 1);
+			grid.Children.Add(frames[0], 0, 0);
+	        grid.Children.Add(frames[1], 1, 0);
+	        grid.Children.Add(frames[2], 2, 0);
+	        grid.Children.Add(frames[3], 0, 1);
+	        grid.Children.Add(frames[4], 1, 1);
 
 	        Content = new ScrollView
 	        {
@@ -85,17 +87,23 @@ namespace Waypoint
             Button viewerButton = new Button
             {
                 Text = "View map",
+				VerticalOptions = LayoutOptions.FillAndExpand,
+	            HorizontalOptions = LayoutOptions.FillAndExpand,
             };
             viewerButton.Clicked += viewerButton_Clicked;
 
 			Button TakePictureButton = new Button
 			{
 				Text = "Take from camera",
+				VerticalOptions = LayoutOptions.FillAndExpand,
+	            HorizontalOptions = LayoutOptions.FillAndExpand,
 			};
 			TakePictureButton.Clicked += TakePictureButton_Clicked;
 			Button UploadPictureButton = new Button
 			{
 				Text = "Pick a photo",
+				VerticalOptions = LayoutOptions.FillAndExpand,
+	            HorizontalOptions = LayoutOptions.FillAndExpand,
 			};
 			UploadPictureButton.Clicked += UploadPictureButton_Clicked;
 			Image1 = new Image
@@ -112,18 +120,28 @@ namespace Waypoint
 				Text = "no heading yet"
 			};
 
-			/*this.Content = new StackLayout
+			this.Content = new StackLayout
 			{
 				Children = {
-					grid,
-                    viewerButton,
-					TakePictureButton,
-					UploadPictureButton,
-					Image1,
-					CompassImage,
-					label
+					new ScrollView
+					{
+						VerticalOptions = LayoutOptions.FillAndExpand,
+						HorizontalOptions = LayoutOptions.FillAndExpand,
+						Content = grid,
+					},
+					new StackLayout {
+						Orientation = StackOrientation.Horizontal,
+						Children = {
+							viewerButton,
+							TakePictureButton,
+							UploadPictureButton,
+						}
+					}
+					//Image1,
+					//CompassImage,
+					//label
 				}
-			};*/
+			};
 			//this.Content = grid;
 
 			CrossCompass.Current.CompassChanged += (s, e) =>
