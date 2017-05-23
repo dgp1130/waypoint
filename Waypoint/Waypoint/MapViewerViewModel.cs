@@ -56,6 +56,7 @@ namespace Waypoint
         {
             // Convert Stream to byte[] so data is not lost when the original Stream is closed
             byte[] bytes;
+            mapStream.Position = 0; // Reset to beginning
             using (var memStream = new MemoryStream())
             {
                 mapStream.CopyTo(memStream);

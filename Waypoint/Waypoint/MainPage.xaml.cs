@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
-//using Xam.Plugin.Media;
 using Plugin.Compass;
 using System.IO;
 using System.Reflection;
@@ -33,47 +32,77 @@ namespace Waypoint
 				VerticalOptions = LayoutOptions.CenterAndExpand
 			};
 
-			//StackLayout 
-
 			List<Frame> frames = new List<Frame>();
-			List<String> urls = new List<String>();
+			List<Map> maps = new List<Map>();
 
-			TapGestureRecognizer tapGesture = new TapGestureRecognizer();
-			tapGesture.Tapped += viewerButton_Clicked;
-
-			urls.Add("http://www.yosemite.ca.us/maps/yosemite_national_park_map.jpg");
-			urls.Add("http://sites.ieee.org/scv-eds/files/2013/06/Picture1.jpg");
-			urls.Add("https://s-media-cache-ak0.pinimg.com/originals/72/a7/01/72a70155020b7a0663b7310058b68ef6.jpg");
-			urls.Add("http://media.montalvoarts.org/uploads/images/2007/October/grounds129.png");
-			urls.Add("http://www.mappery.com/maps/UC-San-Diego-Map.jpg");
+            Assembly assembly = typeof(MainPage).GetTypeInfo().Assembly;
+            maps.Add(new Map(assembly.GetManifestResourceStream("Waypoint.maps.scu.jpg"), new Size(1313, 1135)));
+            maps.Add(new Map(assembly.GetManifestResourceStream("Waypoint.maps.yosemite.jpg"), new Size(1527, 1972)));
+            maps.Add(new Map(assembly.GetManifestResourceStream("Waypoint.maps.montalvo.png"), new Size(980, 840)));
+            maps.Add(new Map(assembly.GetManifestResourceStream("Waypoint.maps.ucsd.jpg"), new Size(1005, 1102)));
 
 			var grid = new Grid();
 			grid.BackgroundColor = Color.White;
 			grid.RowDefinitions.Add(new RowDefinition { Height = 100});
 			grid.ColumnDefinitions.Add(new ColumnDefinition { Width = 100 });
-			grid.RowDefinitions.Add(new RowDefinition { Height =100});
+			grid.RowDefinitions.Add(new RowDefinition { Height = 100});
 			grid.ColumnDefinitions.Add(new ColumnDefinition { Width = 100 });
 			grid.RowDefinitions.Add(new RowDefinition { Height = 100});
 			grid.ColumnDefinitions.Add(new ColumnDefinition { Width = 100 });
 
-			for (int i = 0; i < urls.Count; i++)
-			{
-				frames.Add(new Frame
-				{
-					Content = new StackLayout{
-						Children = {
-							new Image { Source = ImageSource.FromUri(new Uri(urls[i])) }
-						}
-					}
-				});
-				frames[i].GestureRecognizers.Add(tapGesture);
+			foreach (var map in maps)
+            {
+                var frame = new Frame
+                {
+                    Content = new StackLayout
+                    {
+                        Children = {
+                            new Image {
+                                Source = ImageSource.FromStream(() => {
+                                    // Hard copy stream to a new MemoryStream
+                                    using (var memStream = new MemoryStream())
+                                    {
+                                        map.Image.CopyTo(memStream);
+                                        return new MemoryStream(memStream.ToArray());
+                                    }
+                                }),
+                            }
+                        }
+                    }
+                };
+                frame.GestureRecognizers.Add(new TapGestureRecognizer
+                {
+                    Command = new Command(() => map_Tapped(map)),
+                });
+                frames.Add(frame);
 			}
 
 			grid.Children.Add(frames[0], 0, 0);
 	        grid.Children.Add(frames[1], 1, 0);
 	        grid.Children.Add(frames[2], 2, 0);
 	        grid.Children.Add(frames[3], 0, 1);
-	        grid.Children.Add(frames[4], 1, 1);
+
+<<<<<<< HEAD
+            // Temporary button to navigate to MapViewer
+            // When we have a grid of images, tapping one should perform the same action
+            Button viewerButton = new Button
+            {
+                Text = "View map",
+				VerticalOptions = LayoutOptions.FillAndExpand,
+	            HorizontalOptions = LayoutOptions.FillAndExpand,
+            };
+            viewerButton.Clicked += viewerButton_Clicked;
+
+||||||| merged common ancestors
+	        Content = new ScrollView
+	        {
+
+	            VerticalOptions = LayoutOptions.FillAndExpand,
+	            HorizontalOptions = LayoutOptions.FillAndExpand,
+	            Content = grid,
+
+
+	        };
 
             // Temporary button to navigate to MapViewer
             // When we have a grid of images, tapping one should perform the same action
@@ -85,6 +114,16 @@ namespace Waypoint
             };
             viewerButton.Clicked += viewerButton_Clicked;
 
+=======
+	        Content = new ScrollView
+	        {
+
+	            VerticalOptions = LayoutOptions.FillAndExpand,
+	            HorizontalOptions = LayoutOptions.FillAndExpand,
+	            Content = grid,
+	        };
+
+>>>>>>> a47b0e875d5b225e19b7ea0a91da618b1e8134a8
 			Button TakePictureButton = new Button
 			{
 				Text = "Take from camera",
@@ -92,6 +131,7 @@ namespace Waypoint
 	            HorizontalOptions = LayoutOptions.FillAndExpand,
 			};
 			TakePictureButton.Clicked += TakePictureButton_Clicked;
+
 			Button UploadPictureButton = new Button
 			{
 				Text = "Pick a photo",
@@ -99,18 +139,10 @@ namespace Waypoint
 	            HorizontalOptions = LayoutOptions.FillAndExpand,
 			};
 			UploadPictureButton.Clicked += UploadPictureButton_Clicked;
+
 			Image1 = new Image
 			{
 				HeightRequest = 240
-			};
-			Image CompassImage = new Image
-			{
-				HeightRequest = 50,
-				Source = ImageSource.FromUri(new Uri("https://cdn2.iconfinder.com/data/icons/map-location-set/512/632503-compass_wind_rose-512.png"))
-			};
-			Label label = new Label
-			{
-				Text = "no heading yet"
 			};
 
 			this.Content = new StackLayout
@@ -132,6 +164,7 @@ namespace Waypoint
 					}
 				}
 			};
+<<<<<<< HEAD
 
 			CrossCompass.Current.CompassChanged += (s, e) =>
 			{
@@ -143,16 +176,26 @@ namespace Waypoint
 			};
 
 			CrossCompass.Current.Start();
+||||||| merged common ancestors
+			//this.Content = grid;
+
+			CrossCompass.Current.CompassChanged += (s, e) =>
+			{
+			    //Debug.WriteLine("*** Compass Heading = {0}", e.Heading);
+			    
+			    label.Text = $"Heading = {e.Heading}";
+				//rotate compass image here
+			   
+			};
+
+			CrossCompass.Current.Start();
+=======
+>>>>>>> a47b0e875d5b225e19b7ea0a91da618b1e8134a8
         }
 
-        private async void viewerButton_Clicked(object sender, EventArgs evt)
+        private async void map_Tapped(Map map)
         {
-            // Navigate to MapViewer with SCU test case
-            Assembly assembly = typeof(MainPage).GetTypeInfo().Assembly;
-            using (Stream stream = assembly.GetManifestResourceStream("Waypoint.test_case_scu.jpg"))
-            {
-                await Navigation.PushAsync(new MapViewer(stream, new Size(1313, 1135) /* hard code size temporarily */));
-            }
+            await Navigation.PushAsync(new MapViewer(map.Image, map.Size));
         }
 
 		private async void UploadPictureButton_Clicked(object sender, EventArgs e)
@@ -200,6 +243,22 @@ namespace Waypoint
 				return;
 
 			Image1.Source=ImageSource.FromStream(() => file.GetStream());
-		}
+        }
+
+        // Internal model class representing a Map
+        private class Map
+        {
+            private readonly Stream image;
+            public Stream Image { get => image; }
+
+            private readonly Size size;
+            public Size Size { get => size; }
+
+            public Map(Stream image, Size size)
+            {
+                this.image = image;
+                this.size = size;
+            }
+        }
     }
 }
