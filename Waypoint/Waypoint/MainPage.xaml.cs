@@ -11,6 +11,8 @@ using Plugin.Compass;
 using System.IO;
 using System.Reflection;
 using System.Diagnostics;
+using System.Collections.Generic;
+
 
 namespace Waypoint
 {
@@ -22,6 +24,61 @@ namespace Waypoint
             InitializeComponent();
 
             Padding = new Thickness(0, 20, 0, 0);
+
+			Label testOutput = new Label 
+			{
+				Text = "test output"
+			};
+
+			//var grid = new Grid();
+			//grid.RowDefinitions.Add (new RowDefinition { Height = new GridLength(2, GridUnitType.Star) });
+			//grid.RowDefinitions.Add (new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+			//grid.RowDefinitions.Add (new RowDefinition { Height = GridLength.Auto});
+			//grid.ColumnDefinitions.Add (new ColumnDefinition{ Width = GridLength.Auto });
+
+			//StackLayout 
+
+			List<Frame> frames = new List<Frame>();
+			List<String> urls = new List<String>();
+
+			urls.Add("http://www.yosemite.ca.us/maps/yosemite_national_park_map.jpg");
+			urls.Add("http://sites.ieee.org/scv-eds/files/2013/06/Picture1.jpg");
+			urls.Add("https://s-media-cache-ak0.pinimg.com/originals/72/a7/01/72a70155020b7a0663b7310058b68ef6.jpg");
+			urls.Add("http://media.montalvoarts.org/uploads/images/2007/October/grounds129.png");
+			urls.Add("http://www.mappery.com/maps/UC-San-Diego-Map.jpg");
+
+			var grid = new Grid();
+			grid.BackgroundColor = Color.White;
+			grid.RowDefinitions.Add(new RowDefinition { Height = 100});
+			grid.ColumnDefinitions.Add(new ColumnDefinition { Width = 100 });
+			grid.RowDefinitions.Add(new RowDefinition { Height =100});
+			grid.ColumnDefinitions.Add(new ColumnDefinition { Width = 100 });
+			grid.RowDefinitions.Add(new RowDefinition { Height = 100});
+			grid.ColumnDefinitions.Add(new ColumnDefinition { Width = 100 });
+
+			var alpha = new Image { Source = ImageSource.FromUri(new Uri(urls[0])) };
+			var beta = new Image { Source = ImageSource.FromUri(new Uri(urls[1])) };
+			var gamma = new Image { Source = ImageSource.FromUri(new Uri(urls[2])) };
+			var delta = new Image { Source = ImageSource.FromUri(new Uri(urls[3])) };
+			var epsilon = new Image { Source = ImageSource.FromUri(new Uri(urls[4])) };
+			//var theta = new Image { Source = ImageSource.FromUri(new Uri(urls[0])) };
+
+			grid.Children.Add(alpha, 0, 0);
+	        grid.Children.Add(beta, 1, 0);
+	        grid.Children.Add(gamma, 2, 0);
+	        grid.Children.Add(delta, 0, 1);
+	        grid.Children.Add(epsilon, 1, 1);
+	        //grid.Children.Add(theta, 2, 1);
+
+	        Content = new ScrollView
+	        {
+
+	            VerticalOptions = LayoutOptions.FillAndExpand,
+	            HorizontalOptions = LayoutOptions.FillAndExpand,
+	            Content = grid,
+
+
+	        };
 
             // Temporary button to navigate to MapViewer
             // When we have a grid of images, tapping one should perform the same action
@@ -55,9 +112,10 @@ namespace Waypoint
 				Text = "no heading yet"
 			};
 
-			this.Content = new StackLayout
+			/*this.Content = new StackLayout
 			{
 				Children = {
+					grid,
                     viewerButton,
 					TakePictureButton,
 					UploadPictureButton,
@@ -65,7 +123,8 @@ namespace Waypoint
 					CompassImage,
 					label
 				}
-			};
+			};*/
+			//this.Content = grid;
 
 			CrossCompass.Current.CompassChanged += (s, e) =>
 			{
