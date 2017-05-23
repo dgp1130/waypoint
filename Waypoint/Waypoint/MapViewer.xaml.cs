@@ -10,6 +10,8 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using SkiaSharp.Views.Forms;
 using SkiaSharp;
+using Plugin.Compass;
+using System.Reflection;
 
 namespace Waypoint
 {
@@ -17,6 +19,7 @@ namespace Waypoint
     public partial class MapViewer : ContentPage
     {
         private readonly MapViewerViewModel viewModel;
+        private double heading; // Degrees from North
 
         public MapViewer(Stream map, Size mapSize)
         {
@@ -34,6 +37,16 @@ namespace Waypoint
                     canvasView.InvalidateSurface();
                 }
             };
+
+            // Listen for changes in the compass
+            CrossCompass.Current.CompassChanged += (sender, evt) =>
+            {
+                heading = evt.Heading;
+                canvasView.InvalidateSurface();
+            };
+
+            // Start listening to compass events
+            CrossCompass.Current.Start();
         }
 
         // Paint the canvas with the image and its reference lines
@@ -79,12 +92,34 @@ namespace Waypoint
                     canvas.DrawBitmap(bitmap, rect);
                 }
 
+                // Draw compass in upper-right corner
+                Size compassSize = new Size(200, 200);
+                rotateCanvas(canvas, (float) -heading, (float) (canvasSize.Width - (compassSize.Width / 2.0)), (float) (compassSize.Height / 2.0), () =>
+                {
+                    // Load compass image from PCL assembly, because SkiaSharp does not like images in the platform-specific projects
+                    Assembly assembly = typeof(MapViewer).GetTypeInfo().Assembly;
+                    Stream compassStream = assembly.GetManifestResourceStream("Waypoint.res.img.compass.png");
+                    using (var skStream = new SKManagedStream(compassStream))
+                    using (var bitmap = SKBitmap.Decode(skStream))
+                    {
+                        canvas.DrawBitmap(bitmap, SKRect.Create((float)(canvasSize.Width - compassSize.Width), 0.0f,
+                            (float)compassSize.Width, (float)compassSize.Height));
+                    }
+                });
+
                 // Draw each reference line for debugging
-                foreach (var reference in viewModel.References)
+                foreach (var reference in viewModel.References.ToList())
                 {
                     drawReferenceLine(canvas, origin, scaledSize, reference.scale(scale), paint);
                 }
             }
+        }
+
+        private static void rotateCanvas(SKCanvas canvas, float degrees, float px, float py, Action callback)
+        {
+            canvas.RotateDegrees(degrees, px, py); // Rotate canvas
+            callback(); // Invoke callback
+            canvas.RotateDegrees(-degrees, px, py); // Unrotate canvas to original position
         }
 
         // Draw a reference line on the canvas for debugging purposes

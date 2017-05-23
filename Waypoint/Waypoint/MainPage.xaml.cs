@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
-//using Xam.Plugin.Media;
 using Plugin.Compass;
 using System.IO;
 using System.Reflection;
 using System.Diagnostics;
-using System.Collections.Generic;
 
 
 namespace Waypoint
@@ -24,13 +22,6 @@ namespace Waypoint
             InitializeComponent();
 
             Padding = new Thickness(0, 20, 0, 0);
-
-			Label testOutput = new Label 
-			{
-				Text = "test output"
-			};
-
-			//StackLayout 
 
 			List<Frame> frames = new List<Frame>();
 			List<Map> maps = new List<Map>();
@@ -110,15 +101,6 @@ namespace Waypoint
 			{
 				HeightRequest = 240
 			};
-			Image CompassImage = new Image
-			{
-				HeightRequest = 50,
-				Source = ImageSource.FromUri(new Uri("https://cdn2.iconfinder.com/data/icons/map-location-set/512/632503-compass_wind_rose-512.png"))
-			};
-			Label label = new Label
-			{
-				Text = "no heading yet"
-			};
 
 			this.Content = new StackLayout
 			{
@@ -138,26 +120,11 @@ namespace Waypoint
 					}
 				}
 			};
-
-			CrossCompass.Current.CompassChanged += (s, e) =>
-			{
-			    label.Text = $"Heading = {e.Heading}";
-				//rotate compass image here
-			   
-			};
-
-			CrossCompass.Current.Start();
         }
 
         private async void map_Tapped(Map map)
         {
-            // Navigate to MapViewer with SCU test case
-            using (var memStream = new MemoryStream())
-            {
-                map.Image.Position = 0; // Reset stream
-                map.Image.CopyTo(memStream);
-                await Navigation.PushAsync(new MapViewer(new MemoryStream(memStream.ToArray()), map.Size));
-            }
+            await Navigation.PushAsync(new MapViewer(map.Image, map.Size));
         }
 
 		private async void UploadPictureButton_Clicked(object sender, EventArgs e)
