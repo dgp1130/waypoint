@@ -11,7 +11,6 @@ using Plugin.Compass;
 using System.IO;
 using System.Reflection;
 using System.Diagnostics;
-using System.Collections.Generic;
 
 
 namespace Waypoint
@@ -25,9 +24,13 @@ namespace Waypoint
 
             Padding = new Thickness(0, 20, 0, 0);
 
-			Label testOutput = new Label 
+			Label title = new Label
 			{
-				Text = "test output"
+				Text = "WayPoint",
+				FontSize = 30,
+				FontAttributes = FontAttributes.Bold,
+				HorizontalOptions = LayoutOptions.CenterAndExpand,
+				VerticalOptions = LayoutOptions.CenterAndExpand
 			};
 
 			//StackLayout 
@@ -72,16 +75,6 @@ namespace Waypoint
 	        grid.Children.Add(frames[3], 0, 1);
 	        grid.Children.Add(frames[4], 1, 1);
 
-	        Content = new ScrollView
-	        {
-
-	            VerticalOptions = LayoutOptions.FillAndExpand,
-	            HorizontalOptions = LayoutOptions.FillAndExpand,
-	            Content = grid,
-
-
-	        };
-
             // Temporary button to navigate to MapViewer
             // When we have a grid of images, tapping one should perform the same action
             Button viewerButton = new Button
@@ -123,6 +116,7 @@ namespace Waypoint
 			this.Content = new StackLayout
 			{
 				Children = {
+					title,
 					new ScrollView
 					{
 						VerticalOptions = LayoutOptions.FillAndExpand,
@@ -132,17 +126,12 @@ namespace Waypoint
 					new StackLayout {
 						Orientation = StackOrientation.Horizontal,
 						Children = {
-							viewerButton,
 							TakePictureButton,
 							UploadPictureButton,
 						}
 					}
-					//Image1,
-					//CompassImage,
-					//label
 				}
 			};
-			//this.Content = grid;
 
 			CrossCompass.Current.CompassChanged += (s, e) =>
 			{
