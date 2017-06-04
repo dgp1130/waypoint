@@ -178,10 +178,10 @@ namespace Waypoint
         private class Map
         {
             private readonly Stream image;
-            public Stream Image { get => image; }
+            public Stream Image { get { return image; } }
 
             private readonly Size size;
-            public Size Size { get => size; }
+            public Size Size { get { return size; } }
 
             public Map(Stream image, Size size)
             {
