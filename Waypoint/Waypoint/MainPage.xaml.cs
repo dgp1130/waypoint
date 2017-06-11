@@ -10,8 +10,6 @@ using Plugin.Compass;
 using System.IO;
 using System.Reflection;
 using System.Diagnostics;
-//using Xamarin.FormsBook.Toolkit;
-
 
 namespace Waypoint
 {

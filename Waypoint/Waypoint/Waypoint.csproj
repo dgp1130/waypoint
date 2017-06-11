@@ -48,6 +48,8 @@
     <Compile Include="MapViewerViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReferenceRatio.cs" />
+    <Compile Include="WrapLayout.cs" />
+    <Compile Include="WrapOrientation.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MainPage.xaml">
@@ -127,12 +129,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="res\img\compass.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Downloads\xamarin-forms-book-samples-master\Libraries\Xamarin.FormsBook.Toolkit\Xamarin.FormsBook.Toolkit\Xamarin.FormsBook.Toolkit.csproj">
-      <Project>{58EEAFFF-D1BB-4375-AEFC-8270F8415DCE}</Project>
-      <Name>Xamarin.FormsBook.Toolkit</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="res\img\waypoint.png" />

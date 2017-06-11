@@ -161,10 +161,6 @@
       <Project>{6FB26789-BA0D-49AB-8214-1877DC22DA48}</Project>
       <Name>Waypoint</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Downloads\xamarin-forms-book-samples-master\Libraries\Xamarin.FormsBook.Toolkit\Xamarin.FormsBook.Toolkit\Xamarin.FormsBook.Toolkit.csproj">
-      <Project>{58EEAFFF-D1BB-4375-AEFC-8270F8415DCE}</Project>
-      <Name>Xamarin.FormsBook.Toolkit</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Android.Support.Vector.Drawable.23.3.0\build\Xamarin.Android.Support.Vector.Drawable.targets" Condition="Exists('..\..\packages\Xamarin.Android.Support.Vector.Drawable.23.3.0\build\Xamarin.Android.Support.Vector.Drawable.targets')" />
