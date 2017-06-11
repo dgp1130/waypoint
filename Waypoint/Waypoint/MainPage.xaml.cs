@@ -10,20 +10,20 @@ using Plugin.Compass;
 using System.IO;
 using System.Reflection;
 using System.Diagnostics;
+//using Xamarin.FormsBook.Toolkit;
 
 
 namespace Waypoint
 {
-    public partial class MainPage : ContentPage
-    {
-		Image Image1;		 
-        public MainPage()
-        {
-            InitializeComponent();
+	public partial class MainPage : ContentPage
+	{
+		int HEIGHT_REQUEST = 75;
+		int WIDTH_REQUEST = 75;
 
-            Padding = new Thickness(0, 20, 0, 0);
+		public MainPage()
+		{
+			InitializeComponent();
 
-			List<Frame> frames = new List<Frame>();
 			List<Map> maps = new List<Map>();
 
             Assembly assembly = typeof(MainPage).GetTypeInfo().Assembly;
@@ -32,100 +32,34 @@ namespace Waypoint
             maps.Add(new Map(assembly.GetManifestResourceStream("Waypoint.maps.montalvo.png"), new Size(980, 840)));
             maps.Add(new Map(assembly.GetManifestResourceStream("Waypoint.maps.ucsd.jpg"), new Size(1005, 1102)));
 
-			var grid = new Grid();
-			grid.BackgroundColor = Color.White;
-			grid.RowDefinitions.Add(new RowDefinition { Height = 100});
-			grid.ColumnDefinitions.Add(new ColumnDefinition { Width = 100 });
-			grid.RowDefinitions.Add(new RowDefinition { Height = 100});
-			grid.ColumnDefinitions.Add(new ColumnDefinition { Width = 100 });
-			grid.RowDefinitions.Add(new RowDefinition { Height = 100});
-			grid.ColumnDefinitions.Add(new ColumnDefinition { Width = 100 });
-
 			foreach (var map in maps)
-            {
-                var frame = new Frame
-                {
-                    Content = new StackLayout
-                    {
-                        Children = {
-                            new Image {
-                                Source = ImageSource.FromStream(() => {
-                                    // Hard copy stream to a new MemoryStream
-                                    using (var memStream = new MemoryStream())
-                                    {
-                                        map.Image.CopyTo(memStream);
-                                        return new MemoryStream(memStream.ToArray());
-                                    }
-                                }),
-                            }
-                        }
-                    }
-                };
-                frame.GestureRecognizers.Add(new TapGestureRecognizer
-                {
-                    Command = new Command(() => map_Tapped(map)),
-                });
-                frames.Add(frame);
-			}
-
-			grid.Children.Add(frames[0], 0, 0);
-	        grid.Children.Add(frames[1], 1, 0);
-	        grid.Children.Add(frames[2], 2, 0);
-	        grid.Children.Add(frames[3], 0, 1);
-
-	        Content = new ScrollView
-	        {
-
-	            VerticalOptions = LayoutOptions.FillAndExpand,
-	            HorizontalOptions = LayoutOptions.FillAndExpand,
-	            Content = grid,
-	        };
-
-			Button TakePictureButton = new Button
 			{
-				Text = "Take from camera",
-				VerticalOptions = LayoutOptions.FillAndExpand,
-	            HorizontalOptions = LayoutOptions.FillAndExpand,
-			};
-			TakePictureButton.Clicked += TakePictureButton_Clicked;
-
-			Button UploadPictureButton = new Button
-			{
-				Text = "Pick a photo",
-				VerticalOptions = LayoutOptions.FillAndExpand,
-	            HorizontalOptions = LayoutOptions.FillAndExpand,
-			};
-			UploadPictureButton.Clicked += UploadPictureButton_Clicked;
-
-			Image1 = new Image
-			{
-				HeightRequest = 240
-			};
-
-			this.Content = new StackLayout
-			{
-				Children = {
-					new ScrollView
+				var image = new Image
+				{
+					Source = ImageSource.FromStream(() =>
 					{
-						VerticalOptions = LayoutOptions.FillAndExpand,
-						HorizontalOptions = LayoutOptions.FillAndExpand,
-						Content = grid,
-					},
-					new StackLayout {
-						Orientation = StackOrientation.Horizontal,
-						Children = {
-							TakePictureButton,
-							UploadPictureButton,
+						// Hard copy stream to a new MemoryStream
+						using (var memStream = new MemoryStream())
+						{
+							map.Image.CopyTo(memStream);
+							return new MemoryStream(memStream.ToArray());
 						}
-					}
-				}
-			};
-        }
+					}),
+					HeightRequest = HEIGHT_REQUEST,
+					WidthRequest = WIDTH_REQUEST
+				};
+				image.GestureRecognizers.Add(new TapGestureRecognizer
+				{
+					Command = new Command(() => map_Tapped(map)),
+				});
+				wrapLayout.Children.Add(image);
+			}
+		}
 
-        private async void map_Tapped(Map map)
-        {
-            await Navigation.PushAsync(new MapViewer(map.Image, map.Size));
-        }
+		private async void map_Tapped(Map map)
+		{
+			await Navigation.PushAsync(new MapViewer(map.Image, map.Size));
+		}
 
 		private async void UploadPictureButton_Clicked(object sender, EventArgs e)
 		{
@@ -138,12 +72,11 @@ namespace Waypoint
 			var file = await CrossMedia.Current.PickPhotoAsync();
 			if (file == null)
 			{
-				await DisplayAlert("Error", "Photo was null", "OK");
+				await DisplayAlert("Error", "No photo selected", "OK");
 				return;
 			}
-				//return;
+			addImage(file);
 
-			Image1.Source=ImageSource.FromStream(() => file.GetStream());
 		}
 
 		private async void TakePictureButton_Clicked(object sender, EventArgs e)
@@ -169,10 +102,28 @@ namespace Waypoint
 			});
 
 			if (file == null)
+			{
+				await DisplayAlert("Error", "No photo taken", "OK");
 				return;
+			}
 
-			Image1.Source=ImageSource.FromStream(() => file.GetStream());
-        }
+			addImage(file);
+		}
+
+		private void addImage(MediaFile file)
+		{
+			Image image = new Image
+			{
+				Source = ImageSource.FromStream(() => file.GetStream()),
+                HeightRequest = HEIGHT_REQUEST,
+				WidthRequest = WIDTH_REQUEST
+			};
+			/*image.GestureRecognizers.Add(new TapGestureRecognizer
+			{
+				Command = new Command(() => map_Tapped(map)),
+			});*/
+			wrapLayout.Children.Add(image);
+		}
 
         // Internal model class representing a Map
         private class Map

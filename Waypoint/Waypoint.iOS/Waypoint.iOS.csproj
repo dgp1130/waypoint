@@ -166,6 +166,10 @@
       <Project>{6FB26789-BA0D-49AB-8214-1877DC22DA48}</Project>
       <Name>Waypoint</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Downloads\xamarin-forms-book-samples-master\Libraries\Xamarin.FormsBook.Toolkit\Xamarin.FormsBook.Toolkit\Xamarin.FormsBook.Toolkit.csproj">
+      <Project>{58EEAFFF-D1BB-4375-AEFC-8270F8415DCE}</Project>
+      <Name>Xamarin.FormsBook.Toolkit</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.3.4.247\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.4.247\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />

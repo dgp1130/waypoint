@@ -1,7 +1,36 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 xmlns:toolkit="clr-namespace:Xamarin.FormsBook.Toolkit;assembly=Xamarin.FormsBook.Toolkit"
              xmlns:local="clr-namespace:Waypoint"
              x:Class="Waypoint.MainPage">
+
+	<ContentPage.Padding>
+		<OnPlatform x:TypeArguments="Thickness"
+			iOS="0, 20, 0, 0" />
+	</ContentPage.Padding>
+	<StackLayout>
+		<ScrollView>
+			<toolkit:WrapLayout x:Name="wrapLayout"/>
+		</ScrollView>
+		<StackLayout
+			Orientation = "Horizontal"
+			VerticalOptions = "EndAndExpand">
+			<Button
+				x:Name = "TakePictureButton"
+				Text = "Take from camera"
+				VerticalOptions = "LayoutOptions.FillAndExpand"
+				HorizontalOptions = "LayoutOptions.FillAndExpand"
+				Clicked = "TakePictureButton_Clicked">
+			</Button>
+			<Button
+				x:Name = "UploadPictureButton"
+				Text = "Pick a photo"
+				VerticalOptions = "LayoutOptions.FillAndExpand"
+				HorizontalOptions = "LayoutOptions.FillAndExpand"
+				Clicked = "UploadPictureButton_Clicked">
+			</Button>
+		</StackLayout>
+	</StackLayout>
 
 </ContentPage>
