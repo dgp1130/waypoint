@@ -27,7 +27,7 @@ namespace Waypoint
 			List<Map> maps = new List<Map>();
 
             Assembly assembly = typeof(MainPage).GetTypeInfo().Assembly;
-            maps.Add(new Map(assembly.GetManifestResourceStream("Waypoint.maps.scu.jpg"), new Size(1313, 1135)));
+            maps.Add(new Map(assembly.GetManifestResourceStream("Waypoint.maps.scu.png"), new Size(905, 578)));
             maps.Add(new Map(assembly.GetManifestResourceStream("Waypoint.maps.yosemite.jpg"), new Size(1527, 1972)));
             maps.Add(new Map(assembly.GetManifestResourceStream("Waypoint.maps.montalvo.png"), new Size(980, 840)));
             maps.Add(new Map(assembly.GetManifestResourceStream("Waypoint.maps.ucsd.jpg"), new Size(1005, 1102)));

@@ -29,7 +29,7 @@ namespace Waypoint
         }
 
         // Return a new ReferenceRatio scaling the Pixel value with the given ratio
-        public ReferenceRatio scale(double ratio)
+        public ReferenceRatio Scale(double ratio)
         {
             return new ReferenceRatio((int) (pixel * ratio), polar, axis);
         }
