@@ -125,26 +125,20 @@ namespace Waypoint
 			wrapLayout.Children.Add(image);
 		}
 
-		// Internal model class representing a Map
-		private class Map
-		{
-			private readonly Stream image;
-			public Stream Image
-			{
-				get => image; }
+        // Internal model class representing a Map
+        private class Map
+        {
+            private readonly Stream image;
+            public Stream Image { get { return image; } }
 
+            private readonly Size size;
+            public Size Size { get { return size; } }
 
-			private readonly Size size;
-			public Size Size
-			{
-				get => size; }
-
-
-			public Map(Stream image, Size size)
-			{
-				this.image = image;
-				this.size = size;
-			}
-		}
-	}
+            public Map(Stream image, Size size)
+            {
+                this.image = image;
+                this.size = size;
+            }
+        }
+    }
 }
