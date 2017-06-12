@@ -8,6 +8,7 @@
     "SkiaSharp.Views.Forms": "1.58.0",
     "Xam.Plugin.Geolocator": "3.0.4",
     "Xam.Plugin.Media": "2.6.2",
+    "Xamarin.FFImageLoading": "2.2.9",
     "Xamarin.Forms": "2.3.4.224"
   },
   "frameworks": {
