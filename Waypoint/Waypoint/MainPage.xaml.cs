@@ -11,6 +11,7 @@ using System.IO;
 using System.Reflection;
 using System.Diagnostics;
 using FFImageLoading;
+using PCLStorage;
 
 namespace Waypoint
 {
@@ -28,18 +29,24 @@ namespace Waypoint
 		{
 			InitializeComponent();
 
-            // Get preloaded files as Maps
-            Assembly assembly = typeof(MainPage).GetTypeInfo().Assembly;
-            List<Task<Map>> mapTasks = PRELOADED_FILES
-                .Select(uri => assembly.GetManifestResourceStream(uri)) // Convert file URI to Stream
-                .Select(stream => Map.FromStream(stream)) // Convert Stream to Map object
-            .ToList();
-
             // Wait for all Map objects to be constructed
-            Task.WhenAll(mapTasks).ContinueWith(async task =>
+            Task.Run(async () =>
             {
-                // Get list of Maps
-                var maps = new List<Map>(await task);
+                // Get preloaded files as Maps
+                Assembly assembly = typeof(MainPage).GetTypeInfo().Assembly;
+                var preLoadedMaps = new List<Map>(await Task.WhenAll(PRELOADED_FILES
+                    .Select(uri => assembly.GetManifestResourceStream(uri)) // Convert file URI to Stream
+                    .Select(async stream => await Map.FromStream(stream)) // Convert Stream to Map object
+                ));
+
+                // Get list of user-made Maps
+                var userMadeMaps = new List<Map>(await Task.WhenAll((await Storage.GetImageFiles()).Select(async file =>
+                {
+                    return await Map.FromStream(await file.OpenAsync(FileAccess.Read));
+                })));
+
+                // Combine Maps into a single List
+                List<Map> maps = preLoadedMaps.Concat(userMadeMaps).ToList();
 
                 // Run on UI thread to update view
                 Device.BeginInvokeOnMainThread(() =>
@@ -127,6 +134,8 @@ namespace Waypoint
 
 		private async Task addImage(MediaFile file)
 		{
+            var _ = saveImage(file);
+
 			Image image = new Image
 			{
 				Source = ImageSource.FromStream(() => file.GetStream()),
@@ -142,6 +151,12 @@ namespace Waypoint
 
 			wrapLayout.Children.Add(image);
 		}
+
+        // Save the given MediaFile to disk for retrieval later
+        private async Task saveImage(MediaFile data)
+        {
+            await Storage.SaveImage(Guid.NewGuid().ToString() + ".jpg", data.GetStream());
+        }
 
         // Internal model class representing a Map
         private class Map
